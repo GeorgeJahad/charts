@@ -81,15 +81,15 @@ ingress:
 backstage:
 
   # -- Number of deployment replicas
-  replicas: 1
+  replicas: 2
 
   image:
 
     # -- Backstage image registry
-    registry: ghcr.io
+    registry: docker.io
 
     # -- Backstage image repository
-    repository: backstage/backstage
+    repository: generalfuzz/backstage
 
     # -- Backstage image tag (immutable tags are recommended)
     tag: latest
@@ -119,13 +119,12 @@ backstage:
   args: []
 
   # -- Extra app configuration files to inline into command arguments
-  extraAppConfig: []
+  extraAppConfig:
+    - filename: app-config.extra.yaml
+      configMapRef: my-app-config
 
   # -- Deployment sidecars
   extraContainers: []
-
-  # -- Backstage container environment variables
-  extraEnvVars: []
 
   # -- Backstage container environment variables from Secrets
   extraEnvVarsSecrets: []
@@ -171,7 +170,9 @@ backstage:
   #   app:
   #     baseUrl: https://somedomain.tld
   # -- Generates ConfigMap and configures it in the Backstage pods
-  appConfig: {}
+  appConfig:
+    app:
+      baseUrl: http://localhost:7007/
 
   # -- Node tolerations for server scheduling to nodes with taints
   # <br /> Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
@@ -270,7 +271,7 @@ networkPolicy:
 postgresql:
 
   # -- Switch to enable or disable the PostgreSQL helm chart
-  enabled: false
+  enabled: true
 
   # -- The authentication details of the Postgres database
   auth:
